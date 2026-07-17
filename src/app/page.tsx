@@ -4,14 +4,22 @@ import React, { useEffect, useState } from "react";
 
 interface Country {
   name: string;
+  nativeName?: string;
+  flag?: string;
   capital?: string;
   region?: string;
   subregion?: string;
+  demonym?: string;
   population?: number;
   area?: number;
+  currencies?: { code: string; name: string; symbol: string }[];
+  languages?: { name: string }[];
+  timezones?: string[];
   independent?: boolean;
-  unMember?: boolean;
-  flag?: string;
+  alpha2Code?: string;
+  alpha3Code?: string;
+  altSpellings?: string[];
+  numericCode?: string;
 }
 
 export default function Page() {
@@ -86,7 +94,7 @@ export default function Page() {
     }
     if (unFilter) {
       result = result.filter((c) =>
-        unFilter === "Yes" ? c.unMember : !c.unMember
+        unFilter === "Yes" ? c.alpha3Code : !c.alpha3Code
       );
     }
     // Sorting
@@ -163,15 +171,6 @@ export default function Page() {
           <option value="Yes">Independent</option>
           <option value="No">Not Independent</option>
         </select>
-        <select
-          value={unFilter}
-          onChange={(e) => setUnFilter(e.target.value)}
-          className="p-2 bg-white text-black font-bold border-2 border-white shadow"
-        >
-          <option value="">All</option>
-          <option value="Yes">UN Members</option>
-          <option value="No">Not UN Members</option>
-        </select>
       </section>
 
       {/* Content */}
@@ -201,13 +200,26 @@ export default function Page() {
                 className="w-full h-40 object-cover rounded mb-4"
               />
               <h2 className="text-2xl font-bold">{c.name}</h2>
+              <p><strong>Official Name:</strong> {c.nativeName || "Not Available"}</p>
               <p><strong>Capital:</strong> {c.capital || "Not Available"}</p>
               <p><strong>Region:</strong> {c.region || "Not Available"}</p>
               <p><strong>Subregion:</strong> {c.subregion || "Not Available"}</p>
               <p><strong>Population:</strong> {c.population?.toLocaleString() || "Not Available"}</p>
               <p><strong>Area:</strong> {c.area?.toLocaleString() || "Not Available"} km²</p>
+              <p>
+                <strong>Currency:</strong>{" "}
+                {c.currencies?.map((cur) => `${cur.name} (${cur.symbol})`).join(", ") || "Not Available"}
+              </p>
+                <p>
+                <strong>Languages:</strong>{" "}
+                {c.languages?.map((lang) => lang.name).join(", ") || "Not Available"}
+              </p>
+              <p>
+                <strong>Timezones:</strong>{" "}
+                {c.timezones?.join(", ") || "Not Available"}
+              </p>
               <p><strong>Independent:</strong> {c.independent ? "Yes" : "No"}</p>
-              <p><strong>UN Member:</strong> {c.unMember ? "Yes" : "No"}</p>
+               
             </div>
           ))}
         </div>
